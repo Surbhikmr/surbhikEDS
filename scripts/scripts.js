@@ -13,6 +13,28 @@ import {
   loadCSS,
 } from './aem.js';
 
+import {
+  initMartech,
+  updateUserConsent,
+  martechEager,
+  martechLazy,
+  martechDelayed,
+} from '../plugins/martech/src/index.js';
+
+const martechLoadedPromise = initMartech(
+  // The WebSDK config
+  // Documentation: https://experienceleague.adobe.com/en/docs/experience-platform/web-sdk/commands/configure/overview#configure-js
+  {
+    datastreamId: 'c22bb196-e6d9-4544-a811-087396cbaff2' /* your datastream id here, formally edgeConfigId */,
+    orgId: '0E061E2D61F93F260A495FD6@AdobeOrg' /* your ims org id here */,
+  },
+  // The library config
+  {
+    launchUrls: ['https://assets.adobedtm.com/59610d662d36/38d84bddc410/launch-987c124fa82d.min.js'/* your Launch container URLs here */],
+    personalization: false,
+  },
+);
+
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
 /**
@@ -80,7 +102,11 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
-    await waitForLCP(LCP_BLOCKS);
+    await Promise.all([
+      martechLoadedPromise.then(martechEager),
+      waitForLCP(LCP_BLOCKS),
+    ]);
+
   }
 
   try {
@@ -111,6 +137,8 @@ async function loadLazy(doc) {
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 
+  await martechLazy();
+
   sampleRUM('lazy');
   sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
   sampleRUM.observe(main.querySelectorAll('picture > img'));
@@ -122,7 +150,10 @@ async function loadLazy(doc) {
  */
 function loadDelayed() {
   // eslint-disable-next-line import/no-cycle
-  window.setTimeout(() => import('./delayed.js'), 3000);
+  window.setTimeout(() => {
+    martechDelayed();
+    import('./delayed.js');
+  }, 3000);
   // load anything that can be postponed to the latest here
 }
 
