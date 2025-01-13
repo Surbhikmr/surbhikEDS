@@ -13,7 +13,7 @@
     'pageTitle': document.title,
     });
     //form data 
-    document.querySelector('#email-form').addEventListener('submit', function(event) {
+    document.querySelector('form[data-action="/email-form"]').addEventListener('submit', function(event) {
 
       // Capture form field values
       var formData = new FormData(event.target);
@@ -25,7 +25,7 @@
       // Push form submission data to the dataLayer
       window.dataLayer.push({
         'event': 'formSubmit',
-        'formName': 'email-form',
+        'formName': 'emailform',
         'formFields': formFields
       });
 
