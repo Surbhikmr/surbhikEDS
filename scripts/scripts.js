@@ -164,3 +164,25 @@ async function loadPage() {
 }
 
 loadPage();
+
+// Data layer set up 
+//Testing
+document.querySelector('form[data-action="/email-form"]').addEventListener('submit', function(event) {
+
+  // Capture form field values
+  var formData = new FormData(event.target);
+  var formFields = {};
+  formData.forEach(function(value, key) {
+    formFields[key] = value;
+  });
+
+  // Push data to the dataLayer
+  window.dataLayer.push({
+    'event': 'formSubmit',
+    'formName': 'emailForm',
+    'formFields': formFields
+  });
+
+  // Optionally, submit the form after pushing the data
+  event.target.submit();
+});

@@ -2,37 +2,6 @@
 <script src="/scripts/aem.js" type="module"></script>
 <script src="/scripts/scripts.js" type="module"></script>
 
-<!--Data Layer to enable rich data collection and targeting-->
-<script>
-     // Initialize the dataLayer
-     window.dataLayer = window.dataLayer || [];
-    // Push specific data to the dataLayer
-    window.dataLayer.push({
-    'event': 'pageView',
-    'pageCategory': 'Home',
-    'pageTitle': document.title,
-    });
-    //form data 
-    document.querySelector('form[data-action="/email-form"]').addEventListener('submit', function(event) {
-
-      // Capture form field values
-      var formData = new FormData(event.target);
-      var formFields = {};
-      formData.forEach(function(value, key) {
-        formFields[key] = value;
-      });
-
-      // Push form submission data to the dataLayer
-      window.dataLayer.push({
-        'event': 'formSubmit',
-        'formName': 'emailform',
-        'formFields': formFields
-      });
-
-      // Optionally, submit the form after pushing the data
-      event.target.submit();
-    });
-</script>
 
     <!--/Data Layer-->
     <!--prehiding snippet for Adobe Target with asynchronous tags deployment-->
