@@ -4,14 +4,36 @@
 
 <!--Data Layer to enable rich data collection and targeting-->
 <script>
-    var digitalData = {
-        "page": {
-            "pageInfo" : {
-                "pageName": "Home"
-                }
-            }
-    };
-    </script>
+     // Initialize the dataLayer
+     window.dataLayer = window.dataLayer || [];
+    // Push specific data to the dataLayer
+    window.dataLayer.push({
+    'event': 'pageView',
+    'pageCategory': 'Home',
+    'pageTitle': document.title,
+    });
+    //form data 
+    document.querySelector('#email-form').addEventListener('submit', function(event) {
+
+      // Capture form field values
+      var formData = new FormData(event.target);
+      var formFields = {};
+      formData.forEach(function(value, key) {
+        formFields[key] = value;
+      });
+
+      // Push form submission data to the dataLayer
+      window.dataLayer.push({
+        'event': 'formSubmit',
+        'formName': 'email-form',
+        'formFields': formFields
+      });
+
+      // Optionally, submit the form after pushing the data
+      event.target.submit();
+    });
+</script>
+
     <!--/Data Layer-->
     <!--prehiding snippet for Adobe Target with asynchronous tags deployment-->
     <script>
@@ -24,5 +46,3 @@
 <link rel="preload" as="script" crossorigin="anonymous" href="/plugins/martech/src/index.js"></link>
 <link rel="preload" as="script" crossorigin="anonymous" href="/plugins/martech/src/alloy.min.js"></link>
 <link rel="preconnect" href="https://edge.adobedc.net"></link>
-
-   
