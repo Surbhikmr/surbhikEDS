@@ -177,7 +177,7 @@ document.querySelector('form[data-action="/email-form"]').addEventListener('subm
   });
 
   // Push data to the dataLayer
-  window.dataLayer.push({
+  window.adobeDataLayer.push({
     'event': 'formSubmit',
     'formName': 'emailForm',
     'formFields': formFields
